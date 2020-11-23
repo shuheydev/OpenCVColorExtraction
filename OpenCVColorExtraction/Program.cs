@@ -16,8 +16,39 @@ namespace OpenCVColorExtraction
             if (src is null)
                 Console.WriteLine("fail to read file.");
 
-            
-            
+            //ExtractColorByRGB(src);//RGBで色を指定
+            ExtractColorByHSV(src);//HSVで色を指定
+        }
+
+        //抽出したい色の範囲をHSVで指定
+        const int H_MAX = 120;
+        const int H_MIN = 111;
+        const int S_MAX = 255;
+        const int S_MIN = 50;
+        const int V_MAX = 255;
+        const int V_MIN = 50;
+        private static void ExtractColorByHSV(Mat src)
+        {
+            //HSVに変換
+            Mat hsv = new Mat();
+            Cv2.CvtColor(src, hsv, ColorConversionCodes.RGB2HSV);
+
+            //マスクを作成
+            Scalar s_min = new Scalar(H_MIN, S_MIN, V_MIN);
+            Scalar s_max = new Scalar(H_MAX, S_MAX, V_MAX);
+            Mat maskImage = new Mat();
+            Cv2.InRange(hsv, s_min, s_max, maskImage);
+
+            //マスクを使ってフィルタリング
+            Mat masked = new Mat();
+            src.CopyTo(masked, maskImage);
+
+            //表示
+            using (new Window("src", src))
+            using (new Window("hsv", hsv))
+            using (new Window("maskImage", maskImage))
+            using (new Window("masked", masked))
+                Cv2.WaitKey();//何かキーが押されるまで待つ
         }
 
 
@@ -36,19 +67,12 @@ namespace OpenCVColorExtraction
             Mat maskImage = new Mat();
             Cv2.InRange(src, s_min, s_max, maskImage);
 
-
             //マスクを使ってフィルタリング
             Mat masked = new Mat();
             src.CopyTo(masked, maskImage);
 
-
-            //HSVに変換
-            Mat hsv = new Mat();
-            Cv2.CvtColor(src, hsv, ColorConversionCodes.RGB2HSV);
-
             //表示
             using (new Window("src", src))
-            //using (new Window("hsv", hsv))
             using (new Window("maskImage", maskImage))
             using (new Window("masked", masked))
                 Cv2.WaitKey();//何かキーが押されるまで待つ
