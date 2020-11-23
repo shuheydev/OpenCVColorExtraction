@@ -9,7 +9,7 @@ namespace OpenCVColorExtraction
         {
             Console.WriteLine("Hello World!");
 
-            string inputFilePath = "Images/gauge-1.jpg";
+            string inputFilePath = "Images/gauge-2.jpg";
 
             //画像を読み込み
             var src = Cv2.ImRead(inputFilePath);
@@ -21,11 +21,11 @@ namespace OpenCVColorExtraction
         }
 
         //抽出したい色の範囲をHSVで指定
-        const int H_MAX = 120;
-        const int H_MIN = 111;
-        const int S_MAX = 255;
+        const int H_MAX = 180;
+        const int H_MIN = 0;
+        const int S_MAX = 100;
         const int S_MIN = 50;
-        const int V_MAX = 255;
+        const int V_MAX = 100;
         const int V_MIN = 50;
         private static void ExtractColorByHSV(Mat src)
         {
@@ -33,7 +33,7 @@ namespace OpenCVColorExtraction
             Mat hsv = new Mat();
             Cv2.CvtColor(src, hsv, ColorConversionCodes.RGB2HSV);
 
-            //マスクを作成
+            //マスクを作
             Scalar s_min = new Scalar(H_MIN, S_MIN, V_MIN);
             Scalar s_max = new Scalar(H_MAX, S_MAX, V_MAX);
             Mat maskImage = new Mat();
